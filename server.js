@@ -4,7 +4,7 @@ var numCPUs = require('os').cpus().length;
 if (cluster.isMaster) {
 	console.info('Master Process Started - PID: ' + process.pid);
 	// Fork workers.
-	for (var i = 0; i < numCPUs; i++) {
+	for (var i = 0; i < (numCPUs > 2 ? numCPUs : 2); i++) {
 		var worker = cluster.fork();
 		console.info('Worker Started - PID: ' + worker.process.pid);
 	}
