@@ -1,0 +1,273 @@
+<html lang="en">
+
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Speed Multiplication</title>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<h1>Speed Multiplication</h1>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label for="name">Speed:</label>
+						<div class="">
+							<input class="form-control" type="number" id="speed" min="3" max="30" value="30" style="width: 80px; display: inline" />
+						</div>
+						<label for="name">Number of Exercies:</label>
+						<div class="">
+							<input class="form-control" type="number" id="count" min="1" value="10" style="width: 80px; display: inline" />
+						</div>
+						<label for="name">A-Range</label>
+						<div class="">
+							<input class="form-control" type="number" id="a-range" min="1" value="12" style="width: 80px; display: inline" />
+						</div>
+						<label for="name">B-Range</label>
+						<div class="">
+							<input class="form-control" type="number" id="b-range" min="1" value="12" style="width: 80px; display: inline" />
+						</div>
+						<button class="btn btn-primary" type="button" id="start">Start</button>
+						<button class="btn btn-danger" type="button" id="stop">Stop</button>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="row">
+						<label for="name">Problem:</label>
+						<div class="">
+							<input class="form-control" type="text" id="field_a" style="width: 100px; display: inline" readonly="readonly">x<input class="form-control" type="text" id="field_b" style="width: 100px;  display: inline" readonly="readonly">=<input class="form-control"
+							    type="text" id="answer" style="width: 100px;  display: inline">
+						</div>
+						<div class="">
+							&nbsp;
+						</div>
+						<div class="">
+							<div id="time-bar" style="background-color: red; width: 300px; height: 5px"> &nbsp;</div>
+						</div>
+						<div class="">
+							<table class="table">
+								<thead>
+									<tr>
+
+										<th>
+											Left to do
+										</th>
+										<th>
+											Correct
+										</th>
+										<th>
+											Incorrect
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+
+										<td>
+											<input class="form-control" type="text" id="leftToDo" value="" readonly="readonly">
+										</td>
+										<td>
+											<input class="form-control" type="text" id="correct" value="0" readonly="readonly">
+										</td>
+										<td>
+											<input class="form-control" type="text" id="incorrect" value="0" readonly="readonly">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!--
+			<div class="row">
+				<table class="table">
+					<thead>
+						<tr>
+
+							<th>
+								Problem
+							</th>
+							<th>
+								Answer
+							</th>
+							<th>
+								Time
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		-->
+		</div>
+	</body>
+	<script>
+		$(document).ready(
+			function() {
+				var speed = document.getElementById('speed');
+				var start = document.getElementById('start');
+				var stop = document.getElementById('stop');
+				var count = document.getElementById('count');
+				var answer = document.getElementById('answer');
+				var aRange = document.getElementById('a-range');
+				var bRange = document.getElementById('b-range');
+				var timer = document.getElementById('timer');
+				var leftToDo = document.getElementById('leftToDo');
+				var correct = document.getElementById('correct');
+				var incorrect = document.getElementById('incorrect');
+				var timebar = document.getElementById('time-bar');
+
+				var aField = document.getElementById('field_a');
+				var bField = document.getElementById('field_b');
+				var timeout, timeInt, startTime, a, b, s;
+				var totalBarWidth = $(timebar).width();
+				var log = [];
+
+				function disableFields() {
+					speed.disabled = true;
+					count.disabled = true;
+					start.disabled = true;
+					aRange.disabled = true;
+					bRange.disabled = true;
+				}
+
+				function displayResults() {
+
+				}
+
+				function end() {
+					enableFields();
+					displayResults();
+				}
+
+				function enableFields() {
+					speed.disabled = false;
+					count.disabled = false;
+					start.disabled = false;
+					aRange.disabled = false;
+					bRange.disabled = false;
+				}
+
+				function success() {
+					correct.value++;
+					clearTimers();
+					clearFields();
+				}
+
+				function fail() {
+					incorrect.value++;
+					clearTimers();
+					clearFields();
+				}
+
+				function clearStats() {
+					correct.value = 0;
+					incorrect.value = 0;
+					log = [];
+				}
+
+				function clearFields() {
+					aField.value = '';
+					bField.value = '';
+					answer.value = '';
+				}
+
+				function getRandomInt(min, max) {
+					return Math.floor(Math.random() * (max - min + 1)) + min;
+				}
+
+				function clearTimers() {
+					clearInterval(timeInt);
+					clearTimeout(timeout);
+				}
+
+				function cycle() {
+					a = getRandomInt(1, aRange.value * 1);
+					b = getRandomInt(1, bRange.value * 1);
+					aField.value = a;
+					bField.value = b;
+					answer.focus();
+					startTime = Date.now();
+					timeout = setTimeout(function() {
+						evaluate();
+					}, s)
+
+					timeInt = setInterval(function() {
+						ratio = 1 - ((Date.now() - startTime) / s);
+						$(timebar).width(Math.round(totalBarWidth * ratio))
+					}, 1);
+				}
+
+				function evaluate() {
+					var logItem = {
+						a: a,
+						b: b,
+						answer: answer.value,
+						time: Date.now() - startTime
+					}
+					if (answer.value * 1 === a * b) {
+						success();
+						logItem.correct = true;
+					} else {
+						fail();
+						logItem.correct = false;
+					}
+
+					log.push(logItem);
+
+					if (leftToDo.value > 1) {
+						cycle();
+						leftToDo.value--;
+					} else {
+						end();
+					}
+				}
+
+				stop.onclick = function() {
+					clearTimers();
+					end();
+				}
+
+				start.onclick = function() {
+					clearStats();
+					s = speed.value * 1000;
+					disableFields();
+					leftToDo.value = count.value * 1;
+					cycle();
+				};
+
+				answer.addEventListener('keypress', function(event) {
+					var _key = (window.Event) ? event.which : event.keyCode;
+					if (_key == 13) {
+						evaluate();
+					}
+				})
+
+			}
+		)
+	</script>
+
+</html>
