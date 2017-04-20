@@ -12,6 +12,11 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<style>
+			.error {
+				background-color: red;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -85,6 +90,38 @@
 								</tbody>
 							</table>
 						</div>
+						<div class="">
+							<table class="table">
+								<thead>
+									<tr>
+
+										<th>
+											Exercise
+										</th>
+										<th>
+											Time
+										</th>
+										<th>
+											Result
+										</th>
+									</tr>
+								</thead>
+								<tbody id="resultBody">
+									<tr>
+
+										<td>
+											<input class="form-control" type="text" id="leftToDo" value="" readonly="readonly">
+										</td>
+										<td>
+											<input class="form-control" type="text" id="correct" value="0" readonly="readonly">
+										</td>
+										<td>
+											<input class="form-control" type="text" id="incorrect" value="0" readonly="readonly">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -125,6 +162,43 @@
 		</div>
 	</body>
 	<script>
+
+		class ResultTable {
+			constructor(element) {
+				this.root = element;
+			}
+
+			// {
+			// 	a: a,
+			// 	b: b,
+			// 	answer: answer.value,
+			// 	time: Date.now() - startTime
+			//	correct
+			// }
+
+
+			add(item) {
+				var problem = document.createElement('td');
+				var time = document.createElement('td');
+				var result = document.createElement('td');
+				problem.innerText = item.a + ' * ' + item.b + ' = ?';
+				time.innerText = item.time;
+				result.innerText = (item.correct ? item.answer : item.answer);
+				var row = document.createElement('tr');
+				row.appendChild(problem);
+				row.appendChild(time);
+				row.appendChild(result);
+				row.className = (item.correct ? 'correct' : 'error')
+				this.root.appendChild(row);
+			}
+
+			empty() {
+				while(this.root.childNodes.length > 0) {
+					this.root.removeChild(this.root.lastChild);
+				}
+			}
+		}
+
 		$(document).ready(
 			function() {
 				var speed = document.getElementById('speed');
@@ -145,6 +219,7 @@
 				var timeout, timeInt, startTime, a, b, s;
 				var totalBarWidth = $(timebar).width();
 				var log = [];
+				var resultTable = new ResultTable(document.getElementById('resultBody'));
 
 				function disableFields() {
 					speed.disabled = true;
@@ -155,7 +230,9 @@
 				}
 
 				function displayResults() {
-
+					var root = document.getElementById('resultBody');
+					var row = document.createElement('tr');
+					var result = document.createElement('td');
 				}
 
 				function end() {
@@ -187,6 +264,7 @@
 					correct.value = 0;
 					incorrect.value = 0;
 					log = [];
+					resultTable.empty();
 				}
 
 				function clearFields() {
@@ -237,6 +315,7 @@
 					}
 
 					log.push(logItem);
+					resultTable.add(logItem);
 
 					if (leftToDo.value > 1) {
 						cycle();
