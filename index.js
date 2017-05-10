@@ -1,5 +1,12 @@
-var express = require('express')
-var app = express()
+const express = require('express');
+const fs = require('fs');
+const app = express();
+const path = require('path');
+const os = require('os');
+
+app.use(require('morgan')('combined', {
+	stream: fs.createWriteStream(path.join(os.tmpdir(),'/access.log'), {flags: 'a'})
+}));
 
 app.set('view engine', 'ejs');
 
