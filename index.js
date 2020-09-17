@@ -51,7 +51,7 @@ module.exports = (flags) => {
 	});
 	
 	app.use(function (err, req, res, next) {
-		if (err.message == 'Unsupported Operation') {
+		if (err.message === 'Unsupported Operation') {
 			return next();
 		}
 		res.status(500).end();
