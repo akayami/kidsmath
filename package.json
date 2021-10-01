@@ -13,5 +13,9 @@
   },
   "scripts": {
     "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=16",
+    "yarn": "1.22.5"
   }
 }
