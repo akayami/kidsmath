@@ -1,8 +1,6 @@
 const express = require('express');
 const fs = require('fs');
 const app = express();
-const path = require('path');
-const os = require('os');
 
 module.exports = (flags) => {
 	
@@ -80,7 +78,7 @@ module.exports = (flags) => {
 		// default to plain-text. send()
 		res.type('txt').send('Not found');
 	});
-	app.listen(flags.port, function () {
-		console.log(`Example app listening on port ${flags.port}!`);
+	app.listen(flags.PORT, function () {
+		console.log(`Example app listening on port ${flags.PORT}!`);
 	});
 };

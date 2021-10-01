@@ -3,12 +3,12 @@ const numCPUs = require('os').cpus().length;
 
 
 const defaults = {
-	port: 3000
+	PORT: 3000
 };
 const args = require('args');
 
 args
-	.option('port', 'The port on which the app will be running')
+	.option('PORT', 'The port on which the app will be running')
 	.option(['l','logs'], 'Specify where access logs should be sent to')
 ;
 const flags = {...defaults, ...process.env, ...args.parse(process.argv)}
