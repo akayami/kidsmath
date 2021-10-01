@@ -11,11 +11,7 @@ args
 	.option('port', 'The port on which the app will be running')
 	.option(['l','logs'], 'Specify where access logs should be sent to')
 ;
-
-//console.log(process.env);
-
-const flags = Object.assign(defaults, process.env, args.parse(process.argv));
-
+const flags = {...defaults, ...process.env, ...args.parse(process.argv)}
 
 if (cluster.isMaster) {
 	console.info('Master Process Started - PID: ' + process.pid);
